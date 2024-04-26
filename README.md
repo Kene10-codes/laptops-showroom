@@ -1,4 +1,4 @@
-## Laptop Store Project
+# Laptop Store Project
 This project is a simple web application for a laptop store. It allows users to browse through available laptops, view details about each laptop, and make purchases.
 
 ### Features
