@@ -1,10 +1,16 @@
 const morgan = require('morgan')
+const cors = require('cors')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const userRoutes = require('../routes/user')
 const productRoutes = require('../routes/product')
 
 module.exports = function (app) {
+    app.use(
+        cors({
+            origin: ['http://localhost:8080'],
+        })
+    )
     app.use(express.json())
     app.use(morgan('dev'))
     app.use(cookieParser())
