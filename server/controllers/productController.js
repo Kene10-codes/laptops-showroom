@@ -2,7 +2,6 @@ const _ = require('lodash')
 const { Product } = require('../models/product')
 const { addProductValidate } = require('../validator/product')
 const cloudinary = require('../services/cloudinary')
-const upload = require('../middlewares/multer')
 
 // CREATE PRODUCT
 async function addProduct(req, res) {
@@ -10,20 +9,12 @@ async function addProduct(req, res) {
         const { error } = addProductValidate.validate(req.body)
         if (error) return res.status(400).send(error.details[0].message)
 
-        await cloudinary.uploader.upload(req.file.path, function (err, result) {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    success: false,
-                    message: Error,
-                })
-            }
-            res.status(200).json({
-                success: true,
-                message: 'uploaded',
-                data: result,
-            })
-        })
+        // UPLOAD PRODUCT IMAGES TO CLOUDINARY
+        const result = await cloudinary.uploader.upload(req.file.path)
+        if (!result)
+            return res.status(400).json({ error: 'Upload was not successful' })
+
+        res.status(200).json({ message: result })
         // ADD PRODUCT
         const product = new Product(
             _.pick(req.body, [

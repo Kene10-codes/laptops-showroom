@@ -17,13 +17,15 @@ async function registerUser(req, res) {
         if (existingUser)
             return res.status(400).json({ error: 'User already exists' })
 
-        const user = await User({
-            lastName: req.body.lastName,
-            firstName: req.body.firstName,
-            email: req.body.email,
-            phoneNumber: req.body.phoneNumber,
-            password: req.body.password,
-        })
+        const user = await User(
+            _.pick(req.body, [
+                'lastName',
+                'firstName',
+                'email',
+                'phoneNumber',
+                'password',
+            ])
+        )
 
         // HASH PASSWORD
         const salt = await bcryptjs.genSalt(10)
