@@ -155,23 +155,7 @@ async function deleteUser(req, res) {
         console.log(e)
     }
 }
-// UPDATE USER
-// async function updateUser(req, res) {
-//     try {
-//         const { id } = req.params
-//         const user = await User.findByIdAndUpdate(id, {
-//             $set: {},
-//         })
-//         if (user.length === 0)
-//             return res
-//                 .status(400)
-//                 .json({ error: 'No user available in the database' })
 
-//         res.status(200).json({ message: 'User updated successfully' })
-//     } catch (e) {
-//         console.log(e)
-//     }
-// }
 module.exports = {
     fetchUsers,
     registerUser,
