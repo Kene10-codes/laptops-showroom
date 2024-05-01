@@ -13,8 +13,8 @@ const router = express()
 
 router.get('/', fetchUsers)
 router.get('/:id', fetchUser)
-router.delete('/:id', auth, deleteUser)
 router.post('/register', registerUser)
+router.delete('/:id', auth, deleteUser)
 router.post('/verifyUser', auth, validateUserRegister)
 
 // EXPORT ROUTER
