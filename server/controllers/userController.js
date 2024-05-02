@@ -1,9 +1,15 @@
 const _ = require('lodash')
+const crypto = require('crypto')
 const bcryptjs = require('bcryptjs')
 const { User } = require('../models/user')
 const { generateOTP } = require('../services/otp')
-const { userRegister } = require('../validator/user')
+const {
+    userRegister,
+    userResetEmail,
+    validateNewPassword,
+} = require('../validator/user')
 const { sendEmail } = require('../services/sendEmail')
+const { Token } = require('../models/token')
 
 // REGISTER USER
 async function registerUser(req, res) {
@@ -156,10 +162,98 @@ async function deleteUser(req, res) {
     }
 }
 
+// RESET PASSWORD FUNC
+async function resetPassword(req, res) {
+    try {
+        const { error } = userResetEmail.validate(req.body)
+        if (error)
+            return res.status(400).json({ error: error.details[0].message })
+
+        // CHECK EMAIL
+        const user = await User.findOne({ email: req.body.email })
+        if (!user)
+            return res.status(400).json({ error: 'User not in our database' })
+
+        let token = await Token.findOne({ userId: user._id })
+
+        if (!token) {
+            token = new Token({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString('hex'),
+            }).save()
+        }
+
+        const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`
+
+        sendEmail(
+            user,
+            'Reset Password',
+            '',
+            `<div
+    class="container"
+    style="max-width: 90%; margin: auto; padding-top: 20px"
+  >
+    <h2>Dear,</h2>
+    <p style="font-size: 40px; letter-spacing: 2px; text-align:center;">Click the link to reset your password. ${link} </p>
+
+</div>`
+        )
+
+        res.status(200).json({ message: 'Password reset initated' })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+// VERIFY RESET PASSWORD
+async function resetNewPassword(req, res) {
+    try {
+        const { error } = validateNewPassword.validate(req.body)
+        if (error)
+            return res.status(400).json({ error: error.details[0].message })
+
+        const user = await User.findById(req.params.userId)
+
+        if (!user)
+            return res.status(400).json({ error: 'invalid link or expired' })
+
+        const token = await Token.findOne({
+            userId: user._id,
+            token: req.params.token,
+        })
+
+        if (!token) return res.status(400).json({ error: 'Invalid token' })
+
+        user.password = req.body.password
+
+        await user.save()
+        await Token.findByIdAndDelete({ _id: token._id })
+        sendEmail(
+            user,
+            'Password was successfully changed',
+            '',
+            `<p>Dear ${user.name},</p>
+            <p>Welcome to our Techie Laptops! We are thrilled to have you as a new member of our community. </p>
+            <p>You have successfully changed your password</p>
+    
+    
+           Once again, welcome aboard, and thank you for joining us! </p>
+           
+           <p>Best regards,</p>
+           <span>Kenechukwu </span>
+           <span>CEO</span>`
+        )
+        res.status(200).json({ message: 'Password reset was successful' })
+    } catch (e) {
+        console.log(e)
+    }
+}
 module.exports = {
     fetchUsers,
     registerUser,
     validateUserRegister,
     fetchUser,
     deleteUser,
+    resetPassword,
+    resetNewPassword,
 }

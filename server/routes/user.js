@@ -5,6 +5,8 @@ const {
     validateUserRegister,
     fetchUser,
     deleteUser,
+    resetPassword,
+    resetNewPassword,
 } = require('../controllers/userController')
 const auth = require('../middlewares/jwt')
 
@@ -15,7 +17,9 @@ router.get('/', fetchUsers)
 router.get('/:id', fetchUser)
 router.post('/register', registerUser)
 router.delete('/:id', auth, deleteUser)
-router.post('/verifyUser', auth, validateUserRegister)
+router.post('/reset-password', resetPassword)
+router.post('/verifyUser', validateUserRegister)
+router.post('/:userId/:token', resetNewPassword)
 
 // EXPORT ROUTER
 module.exports = router
