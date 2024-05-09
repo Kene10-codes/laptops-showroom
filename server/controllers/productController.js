@@ -1,8 +1,8 @@
 const _ = require('lodash')
-const fs = require('fs')
 const { Product } = require('../models/product')
-const { addProductValidate } = require('../validator/product')
 const cloudinary = require('../services/cloudinary')
+const { getPagination } = require('../middlewares/paginate')
+const { addProductValidate } = require('../validator/product')
 
 // CREATE PRODUCT
 async function addProduct(req, res) {
@@ -116,10 +116,37 @@ async function updateProduct(req, res) {
         console.log(e)
     }
 }
+
+// QUERY, SORT AND SEARCH PRODUCTS
+async function paginateProducts(req, res) {
+    try {
+        // RESPONSE QUERY
+        const { page, limit, sort, search } = req.query
+
+        const { skip, sorted, searched, pageSize } = getPagination(
+            page,
+            limit,
+            sort,
+            search
+        )
+
+        const products = await Product.find({ brand: searched })
+
+            .sort(sorted)
+            .skip(skip)
+            .limit(pageSize)
+        res.status(200).json({ message: products })
+    } catch (e) {
+        res.status(500).json({ error: true, message: e.message })
+    }
+}
+
+// MODULE EXPORTS
 module.exports = {
     addProduct,
     getProducts,
     fetchProduct,
     updateProduct,
     deleteProduct,
+    paginateProducts,
 }
