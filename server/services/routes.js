@@ -4,6 +4,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const userRoutes = require('../routes/user')
 const productRoutes = require('../routes/product')
+const paginateRoutes = require('../routes/paginate')
 
 module.exports = function (app) {
     app.use(
@@ -23,4 +24,7 @@ module.exports = function (app) {
 
     // PRODUCT ROUTE
     app.use('/api/product', productRoutes)
+
+    // PAGINATE PRODUCT
+    app.use('/api/paginate', paginateRoutes)
 }

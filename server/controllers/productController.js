@@ -121,20 +121,21 @@ async function updateProduct(req, res) {
 async function paginateProducts(req, res) {
     try {
         // RESPONSE QUERY
-        const { page, limit, sort, search } = req.query
+        const { page, limit, search, sort } = req.query
 
-        const { skip, sorted, searched, pageSize } = getPagination(
+        const { skip, sorted, limitSize, searched } = getPagination(
             page,
             limit,
-            sort,
-            search
+            search,
+            sort
         )
 
-        const products = await Product.find({ brand: searched })
-
+        const products = await Product.find({
+            brand: { $regex: searched, $options: 'i' },
+        })
             .sort(sorted)
             .skip(skip)
-            .limit(pageSize)
+            .limit(limitSize)
         res.status(200).json({ message: products })
     } catch (e) {
         res.status(500).json({ error: true, message: e.message })
