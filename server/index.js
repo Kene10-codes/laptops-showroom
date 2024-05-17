@@ -11,6 +11,7 @@ const DB_CONNECT = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@
 if (cluster.isMaster) {
     // ENABLES CHILD PROCESS
     cluster.fork()
+    cluster.fork()
 } else {
     // START SERVER FUNCTION
     function startServer() {

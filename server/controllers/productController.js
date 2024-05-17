@@ -3,6 +3,7 @@ const { Product } = require('../models/product')
 const cloudinary = require('../services/cloudinary')
 const { getPagination } = require('../middlewares/paginate')
 const { addProductValidate } = require('../validator/product')
+const { getCacheData } = require('../services/redis')
 
 // CREATE PRODUCT
 async function addProduct(req, res) {
@@ -64,6 +65,7 @@ async function getProducts(req, res) {
 async function fetchProduct(req, res) {
     try {
         const { id } = req.params
+
         const product = await Product.findById(id)
         if (product.length === 0)
             return res
@@ -116,6 +118,25 @@ async function updateProduct(req, res) {
         console.log(e)
     }
 }
+
+/**
+ *  @swagger
+ * paths:
+ * /api/paginate:
+ * get:
+ * summary: Get a resource
+ * description: Get a specific resource by ID.
+ * parameters:
+ * — in: path
+ * name: id
+ * required: true
+ * description: ID of the resource to retrieve.
+ * schema:
+ * type: string
+ * responses:
+ * 200:
+ * description: Successful response
+ */
 
 // QUERY, SORT AND SEARCH PRODUCTS
 async function paginateProducts(req, res) {
