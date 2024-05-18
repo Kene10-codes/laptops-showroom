@@ -1,5 +1,3 @@
-import { Input, InputContainer } from '../styles/style'
-
 export default function ReusableInput({
     label,
     error,
@@ -10,19 +8,17 @@ export default function ReusableInput({
     ...otherProps
 }) {
     return (
-        <InputContainer>
-            <div>
-                <label htmlFor={otherProps.id}>{label}</label>
-                <Input
-                    type={type}
-                    id={otherProps.id}
-                    value={value}
-                    onChange={handleChange}
-                    placeholder={placeholder}
-                    {...otherProps}
-                />
-                {error && <div>{error}</div>}
-            </div>
-        </InputContainer>
+        <div>
+            <label htmlFor={otherProps.id}>{label}</label>
+            <input
+                type={type}
+                id={otherProps.id}
+                value={value}
+                onChange={handleChange}
+                placeholder={placeholder}
+                {...otherProps}
+            />
+            {error && <div>{error}</div>}
+        </div>
     )
 }
