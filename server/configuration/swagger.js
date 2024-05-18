@@ -6,14 +6,13 @@ const swaggerDefinition = {
     info: {
         title: 'Techie Laptops Web API',
         version: '1.0.0',
-        description:
-            'This file contains all the API endpoints, usage, and sample respoonses',
+        description: 'Techie Laptops Endpoints',
     },
 }
 
 const options = {
     swaggerDefinition,
-    apis: [`${path.join(__dirname, 'server', 'routes', './*.js')}`],
+    apis: [`${path.resolve(__dirname, 'server', 'routes', './*.js')}`],
 }
 
 const swaggerSpec = swaggerJSDoc(options)

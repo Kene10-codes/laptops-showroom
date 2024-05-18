@@ -1,9 +1,10 @@
 import './App.css'
+import Home from './pages/home'
 
 function App() {
     return (
-        <div className="App">
-            <header className="App-header">Welcome to the frontend end</header>
+        <div>
+            <Home />
         </div>
     )
 }
