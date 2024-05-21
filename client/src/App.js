@@ -1,5 +1,6 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useContext } from 'react'
 import { Routes, Route } from 'react-router-dom'
+
 const Home = lazy(() => import('./pages/home'))
 const About = lazy(() => import('./pages/about'))
 const Blog = lazy(() => import('./pages/blog'))
@@ -9,7 +10,7 @@ const Register = lazy(() => import('./pages/register'))
 
 function App() {
     return (
-        <>
+        <div>
             <Suspense
                 fallback={
                     <div className="flex flex-row min-h-screen justify-center items-center">
@@ -29,7 +30,7 @@ function App() {
                     />
                 </Routes>
             </Suspense>
-        </>
+        </div>
     )
 }
 

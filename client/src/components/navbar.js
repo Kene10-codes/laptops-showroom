@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import {
     FaUser,
@@ -7,6 +7,8 @@ import {
     FaBars,
     FaTimes,
 } from 'react-icons/fa'
+import { RxSwitch } from 'react-icons/rx'
+import { ThemeContext } from '../context/Theme'
 
 const navLinks = [
     { title: 'Home', url: '/' },
@@ -21,6 +23,7 @@ const iconList = [
     { icon: <FaUser /> },
     { icon: <FaHeart /> },
     { icon: <FaShoppingCart /> },
+    { icon: <RxSwitch /> },
 ]
 
 const bgColor = 'bg-gray-900'
@@ -29,6 +32,12 @@ const modalColor = 'bg-gray-900'
 export default function Navbar() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 769)
     const [showModal, setShowModal] = useState(false)
+    const { toggleTheme, theme } = useContext(ThemeContext)
+
+    // TOGGLE THEME FUNCTION
+    const handleClick = () => {
+        toggleTheme()
+    }
 
     useEffect(() => {
         const handleResize = () => {
@@ -54,9 +63,11 @@ export default function Navbar() {
         <>
             {!isMobile ? (
                 // Laptop Navbar Code Here
-                <nav className={`${bgColor}`}>
+                <nav className={theme ? 'bg-black' : `${bgColor}`}>
                     <div className="flex justify-between mx-auto items-center py-4 px-24">
-                        <div className="text-white font-bold text-xl">Logo</div>
+                        <div className="text-white font-bold text-xl">
+                            <Link to="/">Techie Laptops</Link>
+                        </div>
                         <ul className="flex gap-8 md:gap-16 items-center justify-center text-center cursor-pointer">
                             {navLinks.map((link, index) => (
                                 <li key={index} className="text-white text-sm">
@@ -66,25 +77,32 @@ export default function Navbar() {
                         </ul>
                         <ul className="flex text-white gap-6 items-center cursor-pointer">
                             {iconList.map((item, index) => {
-                                if (index == 0) {
+                                if (index === 0) {
                                     return (
                                         <Link to="/create-account">
                                             <div key={index}>{item.icon}</div>
                                         </Link>
                                     )
                                 }
-                                if (index == 1) {
+                                if (index === 1) {
                                     return (
                                         <Link to="/like-items">
                                             <div key={index}>{item.icon}</div>
                                         </Link>
                                     )
                                 }
-                                if (index == 2) {
+                                if (index === 2) {
                                     return (
                                         <Link to="/cart">
                                             <div key={index}>{item.icon}</div>
                                         </Link>
+                                    )
+                                }
+                                if (index === 3) {
+                                    return (
+                                        <div onClick={handleClick} key={index}>
+                                            {item.icon}
+                                        </div>
                                     )
                                 }
                             })}
@@ -95,7 +113,9 @@ export default function Navbar() {
                 // Mobile Navbar Code Here
                 <nav className={`h-screen ${bgColor} py-4 px-4`}>
                     <div className="mx-auto flex justify-between items-center ">
-                        <div className="text-white font-bold text-xl">Logo</div>
+                        <div className="text-white font-bold text-xl">
+                            Techie Laptop
+                        </div>
                         <div className="flex justify-end items-center gap-6 text-white cursor-pointer">
                             {iconList.map((item, index) => (
                                 <div
