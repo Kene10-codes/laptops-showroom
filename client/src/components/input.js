@@ -8,9 +8,15 @@ export default function ReusableInput({
     ...otherProps
 }) {
     return (
-        <div>
-            <label htmlFor={otherProps.id}>{label}</label>
+        <div className="flex flex-col my-2">
+            <label
+                htmlFor={otherProps.id}
+                className="text-sm font-bold text-slate-400"
+            >
+                {label}
+            </label>
             <input
+                className="rounded-sm border-2 border-inherit pr-4 pl-2 w-full"
                 type={type}
                 id={otherProps.id}
                 value={value}

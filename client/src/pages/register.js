@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
 import ReusableInput from '../components/input'
 import ReusableButton from '../components/button'
-import { SERVER_BASE_URL } from '../constants/constants'
 import Navbar from '../components/navbar'
 import { ThemeContext } from '../context/Theme'
+import { registerUser } from '../services/api'
+import { Link } from 'react-router-dom'
 
 const Register = () => {
     const [firstname, setFirstname] = useState('')
@@ -29,95 +30,92 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        try {
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName: firstname,
-                    lastName: lastname,
-                    email: email,
-                    phoneNumber: phone,
-                    password: password,
-                }),
-            }
-
-            // POST USER DATA
-            const response = await fetch(
-                `${SERVER_BASE_URL}/api/user/register`,
-                requestOptions
-            )
-            if (!response) throw new Error('Network issue')
-            const result = await response.json()
-            setSuccess(result.message)
-        } catch (e) {
-            console.log(e)
-        }
+        await registerUser('POST', 'api/user/register ', {
+            firstName: firstname,
+            lastName: lastname,
+            email: email,
+            phoneNumber: phone,
+            password: password,
+        })
     }
 
     return (
         <div className={theme ? 'bg-black' : 'bg-transparent'}>
             <Navbar />
-            <div className="flex flex-row min-h-screen justify-center items-center ">
-                <h2>Create An Account </h2>
-                <ReusableInput
-                    type="text"
-                    error={error}
-                    value={firstname}
-                    label={'First Name'}
-                    handleChange={handleChange}
-                    placeholder={'Enter First Name'}
-                    required
-                />
-                <ReusableInput
-                    type="text"
-                    label={'Last Name'}
-                    value={lastname}
-                    handleChange={handleChange}
-                    error={error ? 'Last Name is required' : ''}
-                    placeholder={'Enter Last Name'}
-                    required
-                />
-                <ReusableInput
-                    type="email"
-                    label={'Email'}
-                    value={email}
-                    handleChange={handleChange}
-                    error={error ? 'Email is required' : ''}
-                    placeholder={'Enter Email'}
-                    required
-                />
-                <ReusableInput
-                    type="telephone"
-                    label={'Phone Number'}
-                    value={phone}
-                    handleChange={handleChange}
-                    error={error ? 'Phone Number is required' : ''}
-                    placeholder={'Enter Phone Number'}
-                    required
-                />
-                <ReusableInput
-                    type="password"
-                    label={'Password'}
-                    value={password}
-                    handleChange={handleChange}
-                    placeholder={'Enter Password'}
-                    error={error ? 'Password is required' : ''}
-                    required
-                />
-                <ReusableButton
-                    handleSubmit={handleSubmit}
-                    value={'Create An Account'}
-                />
+            <div className="flex flex-col min-h-screen justify-center items-center">
+                <div className="w-2/5">
+                    <h2 className="text-2xl text-center text-red-600 uppercase font-bold">
+                        Create An Account{' '}
+                    </h2>
+                    <ReusableInput
+                        type="text"
+                        error={error}
+                        value={firstname}
+                        label={'First Name'}
+                        handleChange={handleChange}
+                        placeholder={'Enter First Name'}
+                        required
+                    />
+                    <ReusableInput
+                        type="text"
+                        label={'Last Name'}
+                        value={lastname}
+                        handleChange={handleChange}
+                        error={error ? 'Last Name is required' : ''}
+                        placeholder={'Enter Last Name'}
+                        required
+                    />
+                    <ReusableInput
+                        type="email"
+                        label={'Email'}
+                        value={email}
+                        handleChange={handleChange}
+                        error={error ? 'Email is required' : ''}
+                        placeholder={'Enter Email'}
+                        required
+                    />
+                    <ReusableInput
+                        type="telephone"
+                        label={'Phone Number'}
+                        value={phone}
+                        handleChange={handleChange}
+                        error={error ? 'Phone Number is required' : ''}
+                        placeholder={'Enter Phone Number'}
+                        required
+                    />
+                    <ReusableInput
+                        type="password"
+                        label={'Password'}
+                        value={password}
+                        handleChange={handleChange}
+                        placeholder={'Enter Password'}
+                        error={error ? 'Password is required' : ''}
+                        required
+                    />
+                    <ReusableButton
+                        handleSubmit={handleSubmit}
+                        value={'Create An Account'}
+                    />
 
-                {success ? <h4>User successfully registerd</h4> : ''}
-                <span>
-                    By signing up you accept our terms and conditions & privacy
-                    policy
-                </span>
+                    {success ? <h4>User successfully registerd</h4> : ''}
+                    <span>
+                        <ReusableInput
+                            type="checked"
+                            value={password}
+                            handleChange={handleChange}
+                            error={
+                                error
+                                    ? 'Click on Accept Terms And Condition'
+                                    : ''
+                            }
+                            required
+                        />{' '}
+                        By signing up you accept our{' '}
+                        <Link to="terms-condition">
+                            terms and conditions & privacy policy
+                        </Link>
+                    </span>
+                </div>
             </div>
         </div>
     )

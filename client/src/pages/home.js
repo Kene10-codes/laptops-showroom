@@ -1,47 +1,56 @@
 import { useContext, useEffect, useState } from 'react'
+import { ClipLoader } from 'react-spinners'
 import Navbar from '../components/navbar'
 import { ThemeContext } from '../context/Theme'
-import { SERVER_BASE_URL } from '../constants/constants'
+import { fetchProducts } from '../services/api'
+import Card from '../components/card'
 
 const Home = () => {
     const [products, setProducts] = useState([])
-    const [success, setSuccess] = useState()
+    const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
     const { theme } = useContext(ThemeContext)
 
+    console.log(products)
+
     useEffect(() => {
-        const getProducts = async () => {
-            try {
-                const requestOptions = {
-                    method: 'GET',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                }
-
-                // POST USER DATA
-                const response = await fetch(
-                    `${SERVER_BASE_URL}/api/product/`,
-                    requestOptions
-                )
-                if (!response) {
-                    throw new Error('Networl issue')
-                }
-                const result = await response.json()
-                setProducts(result.message)
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
-        getProducts()
+        ;(async function () {
+            const result = await fetchProducts('api/product/', 'GET')
+            setProducts(result?.message)
+            setSuccess(true)
+        })()
     }, [])
 
     return (
         <div className={theme ? 'bg-black text-white' : 'bg-transparent'}>
             <Navbar />
             <div className="flex flex-row min-h-screen">
-                <div>Home</div>
+                {(products?.length === 0) & !loading ? (
+                    <div className="flex flex-row min-h-screen justify-center items-center">
+                        <ClipLoader
+                            color="#000000"
+                            loading={!loading}
+                            size={150}
+                            aria-label="Loading Spinner"
+                            data-testid="loader"
+                        />
+                    </div>
+                ) : (
+                    <div className="flex flex-row">
+                        {products?.map((product, index) =>
+                            product?.photos?.map((photo, index) => (
+                                <Card
+                                    photos={[photo]}
+                                    key={product._id}
+                                    brand={product.brand}
+                                    storage={product.storage}
+                                    price={product.price}
+                                    processor={product.processor}
+                                />
+                            ))
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     )
