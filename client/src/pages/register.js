@@ -56,7 +56,7 @@ const Register = () => {
     }
 
     return (
-        <div>
+        <div className="flex flex-row min-h-screen justify-center items-center">
             <div>
                 <h2>Create An Account </h2>
                 <ReusableInput
