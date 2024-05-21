@@ -16,7 +16,7 @@ export default function ReusableInput({
                 {label}
             </label>
             <input
-                className="rounded-sm border-2 border-inherit pr-4 pl-2 w-full h-10"
+                className="rounded-sm border-2 border-inherit pr-4 pl-2 w-full h-10 outline-slate-50"
                 type={type}
                 id={otherProps.id}
                 value={value}

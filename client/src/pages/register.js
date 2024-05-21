@@ -92,17 +92,13 @@ const Register = () => {
                         error={error ? 'Password is required' : ''}
                         required
                     />
-                    <ReusableButton
-                        handleSubmit={handleSubmit}
-                        value={'Create An Account'}
-                    />
 
-                    {success ? <h4>User successfully registerd</h4> : ''}
-                    <span>
+                    <div className="flex flex-row justify-center items-center">
                         <ReusableInput
-                            type="checked"
+                            type="checkbox"
                             value={password}
                             handleChange={handleChange}
+                            className="border-1 pr-0 w-10 h-5"
                             error={
                                 error
                                     ? 'Click on Accept Terms And Condition'
@@ -110,11 +106,19 @@ const Register = () => {
                             }
                             required
                         />{' '}
-                        By signing up you accept our{' '}
-                        <Link to="terms-condition">
-                            terms and conditions & privacy policy
-                        </Link>
-                    </span>
+                        <span>
+                            By signing up you accept our{' '}
+                            <Link to="terms-condition">
+                                terms and conditions & privacy policy
+                            </Link>
+                        </span>
+                    </div>
+
+                    <ReusableButton
+                        handleSubmit={handleSubmit}
+                        value={'Create An Account'}
+                    />
+                    {success ? <h4>User successfully registerd</h4> : ''}
                 </div>
             </div>
         </div>
