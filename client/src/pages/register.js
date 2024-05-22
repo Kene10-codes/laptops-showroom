@@ -108,7 +108,10 @@ const Register = () => {
                         />{' '}
                         <span>
                             By signing up you accept our{' '}
-                            <Link to="terms-condition">
+                            <Link
+                                to="/terms-condition"
+                                className="font-bold text-blue-500 underline underline-offset-2"
+                            >
                                 terms and conditions & privacy policy
                             </Link>
                         </span>

@@ -13,7 +13,6 @@ import { ThemeContext } from '../context/Theme'
 const navLinks = [
     { title: 'Home', url: '/' },
     { title: 'About', url: '/about' },
-    { title: 'Blogs', url: '/blogs' },
     { title: 'Contact', url: '/contact' },
     { title: 'Create An Account', url: '/create-account' },
     { title: 'Login', url: '/login' },
