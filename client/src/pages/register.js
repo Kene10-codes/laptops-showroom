@@ -13,18 +13,21 @@ const Register = () => {
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
     const [error, setError] = useState('')
+    const [isChecked, setIsChecked] = useState(false)
     const [success, setSuccess] = useState(false)
 
     const { theme } = useContext(ThemeContext)
     // HANDLE CHANGE FUNCTION
     const handleChange = (e) => {
         const { firstname, lastname, email, phone, password, error } = e.target
+
         setFirstname(firstname)
         setLastname(lastname)
         setPassword(password)
         setEmail(email)
         setPhone(phone)
         setError(error)
+        setIsChecked(!isChecked)
     }
 
     const handleSubmit = async (e) => {
@@ -37,6 +40,7 @@ const Register = () => {
             phoneNumber: phone,
             password: password,
         })
+        setSuccess(true)
     }
 
     return (
@@ -96,7 +100,7 @@ const Register = () => {
                     <div className="flex flex-row justify-center items-center">
                         <ReusableInput
                             type="checkbox"
-                            value={password}
+                            checked={isChecked}
                             handleChange={handleChange}
                             className="border-1 pr-0 w-10 h-5"
                             error={

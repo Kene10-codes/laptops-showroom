@@ -37,18 +37,16 @@ const Home = () => {
                     </div>
                 ) : (
                     <div className="flex flex-row">
-                        {products?.map((product, index) =>
-                            product?.photos?.map((photo, index) => (
-                                <Card
-                                    photos={[photo]}
-                                    key={product._id}
-                                    brand={product.brand}
-                                    storage={product.storage}
-                                    price={product.price}
-                                    processor={product.processor}
-                                />
-                            ))
-                        )}
+                        {products?.map((product, index) => (
+                            <Card
+                                photos={product.photos}
+                                key={product._id}
+                                brand={product.brand}
+                                storage={product.storage}
+                                price={product.price}
+                                processor={product.processor}
+                            />
+                        ))}
                     </div>
                 )}
             </div>

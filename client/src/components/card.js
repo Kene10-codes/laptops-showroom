@@ -6,10 +6,17 @@ export default function Card({
     storage,
     price,
 }) {
-    console.log(photos + '>>>>photos')
     return (
         <div>
-            <div>{/* <img src={url} /> */}PHOTO WILL BE HERE</div>
+            {photos.map((url, index) => (
+                <div key={index}>
+                    <img
+                        src={url}
+                        alt={`Slide ${index + 1}`}
+                        className="w-auto h-50"
+                    />
+                </div>
+            ))}
             <div>
                 <h2>Specifications</h2>
                 <p>Brand: {brand}</p>
