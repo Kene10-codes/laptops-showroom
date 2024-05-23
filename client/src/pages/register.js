@@ -6,40 +6,43 @@ import { ThemeContext } from '../context/Theme'
 import { registerUser } from '../services/api'
 import { Link } from 'react-router-dom'
 
+const initialValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
+}
 const Register = () => {
-    const [firstname, setFirstname] = useState('')
-    const [lastname, setLastname] = useState('')
-    const [password, setPassword] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
+    const [values, setValues] = useState(initialValues)
     const [error, setError] = useState('')
     const [isChecked, setIsChecked] = useState(false)
     const [success, setSuccess] = useState(false)
-
     const { theme } = useContext(ThemeContext)
+
+    const { firstName, lastName, email, password, phoneNumber } = values
+
     // HANDLE CHANGE FUNCTION
     const handleChange = (e) => {
-        const { firstname, lastname, email, phone, password, error } = e.target
-
-        setFirstname(firstname)
-        setLastname(lastname)
-        setPassword(password)
-        setEmail(email)
-        setPhone(phone)
-        setError(error)
-        setIsChecked(!isChecked)
+        const { name, value } = e.target
+        setValues({
+            ...values,
+            [name]: value,
+        })
     }
 
+    console.log(firstName)
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         await registerUser('POST', 'api/user/register ', {
-            firstName: firstname,
-            lastName: lastname,
-            email: email,
-            phoneNumber: phone,
-            password: password,
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            password,
         })
+        setValues(initialValues)
         setSuccess(true)
     }
 
@@ -51,10 +54,14 @@ const Register = () => {
                     <h2 className="text-2xl text-center text-red-600 uppercase font-bold">
                         Create An Account{' '}
                     </h2>
+                </div>
+                <form method="post">
                     <ReusableInput
                         type="text"
                         error={error}
-                        value={firstname}
+                        name="firstName"
+                        value={values.firstName}
+                        id="firstName"
                         label={'First Name'}
                         handleChange={handleChange}
                         placeholder={'Enter First Name'}
@@ -63,7 +70,9 @@ const Register = () => {
                     <ReusableInput
                         type="text"
                         label={'Last Name'}
-                        value={lastname}
+                        name="lastName"
+                        value={values.lastName}
+                        id="lastName"
                         handleChange={handleChange}
                         error={error ? 'Last Name is required' : ''}
                         placeholder={'Enter Last Name'}
@@ -72,7 +81,9 @@ const Register = () => {
                     <ReusableInput
                         type="email"
                         label={'Email'}
-                        value={email}
+                        name="email"
+                        value={values.email}
+                        id="email"
                         handleChange={handleChange}
                         error={error ? 'Email is required' : ''}
                         placeholder={'Enter Email'}
@@ -81,7 +92,9 @@ const Register = () => {
                     <ReusableInput
                         type="telephone"
                         label={'Phone Number'}
-                        value={phone}
+                        name="phoneNumber"
+                        value={values.phoneNumber}
+                        id="phoneNumber"
                         handleChange={handleChange}
                         error={error ? 'Phone Number is required' : ''}
                         placeholder={'Enter Phone Number'}
@@ -90,7 +103,9 @@ const Register = () => {
                     <ReusableInput
                         type="password"
                         label={'Password'}
-                        value={password}
+                        id="password"
+                        name="password"
+                        value={values.password}
                         handleChange={handleChange}
                         placeholder={'Enter Password'}
                         error={error ? 'Password is required' : ''}
@@ -101,6 +116,7 @@ const Register = () => {
                         <ReusableInput
                             type="checkbox"
                             checked={isChecked}
+                            id="checkbox"
                             handleChange={handleChange}
                             className="border-1 pr-0 w-10 h-5"
                             error={
@@ -126,7 +142,7 @@ const Register = () => {
                         value={'Create An Account'}
                     />
                     {success ? <h4>User successfully registerd</h4> : ''}
-                </div>
+                </form>
             </div>
         </div>
     )

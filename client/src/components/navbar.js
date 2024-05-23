@@ -78,22 +78,22 @@ export default function Navbar() {
                             {iconList.map((item, index) => {
                                 if (index === 0) {
                                     return (
-                                        <Link to="/create-account">
-                                            <div key={index}>{item.icon}</div>
+                                        <Link to="/create-account" key={index}>
+                                            <div>{item.icon}</div>
                                         </Link>
                                     )
                                 }
                                 if (index === 1) {
                                     return (
-                                        <Link to="/like-items">
-                                            <div key={index}>{item.icon}</div>
+                                        <Link to="/like-items" key={index}>
+                                            <div>{item.icon}</div>
                                         </Link>
                                     )
                                 }
                                 if (index === 2) {
                                     return (
-                                        <Link to="/cart">
-                                            <div key={index}>{item.icon}</div>
+                                        <Link to="/cart" key={index}>
+                                            <div>{item.icon}</div>
                                         </Link>
                                     )
                                 }
