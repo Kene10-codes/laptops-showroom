@@ -21,11 +21,12 @@ export const fetchProducts = async (url, methodType) => {
         const result = await response.json()
         return result
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }
 
-export const registerUser = async (methodType, url, body) => {
+// POST USER API FUNC
+export const postUser = async (url, methodType, body) => {
     try {
         const requestOptions = {
             method: methodType,
@@ -45,9 +46,8 @@ export const registerUser = async (methodType, url, body) => {
             throw new Error('Network issue')
         }
         const result = await response.json()
-        console.log(result)
         return result
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }

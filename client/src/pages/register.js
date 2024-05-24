@@ -3,9 +3,10 @@ import ReusableInput from '../components/input'
 import ReusableButton from '../components/button'
 import Navbar from '../components/navbar'
 import { ThemeContext } from '../context/Theme'
-import { registerUser } from '../services/api'
+import { postUser } from '../services/api'
 import { Link } from 'react-router-dom'
 
+// INITIAL VALUES
 const initialValues = {
     firstName: '',
     lastName: '',
@@ -13,6 +14,8 @@ const initialValues = {
     password: '',
     phoneNumber: '',
 }
+
+// REGISTER COMPONENT
 const Register = () => {
     const [values, setValues] = useState(initialValues)
     const [error, setError] = useState('')
@@ -20,22 +23,23 @@ const Register = () => {
     const [success, setSuccess] = useState(false)
     const { theme } = useContext(ThemeContext)
 
-    const { firstName, lastName, email, password, phoneNumber } = values
-
     // HANDLE CHANGE FUNCTION
     const handleChange = (e) => {
         const { name, value } = e.target
+        // SET VALUES
         setValues({
             ...values,
             [name]: value,
         })
     }
 
-    console.log(firstName)
+    const { firstName, lastName, email, password, phoneNumber } = values
+
+    // HANDLE SUBMIT FUNCTION
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        await registerUser('POST', 'api/user/register ', {
+        await postUser('POST', 'api/user/register ', {
             firstName,
             lastName,
             email,
@@ -47,7 +51,7 @@ const Register = () => {
     }
 
     return (
-        <div className={theme ? 'bg-black' : 'bg-transparent'}>
+        <div className={theme ? 'bg-black text-white' : 'bg-transparent'}>
             <Navbar />
             <div className="flex flex-col min-h-screen justify-center items-center">
                 <div className="w-2/5">

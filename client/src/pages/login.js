@@ -3,35 +3,45 @@ import ReusableInput from '../components/input'
 import ReusableButton from '../components/button'
 import Navbar from '../components/navbar'
 import { ThemeContext } from '../context/Theme'
-import { registerUser } from '../services/api'
+import { postUser } from '../services/api'
 
+const initialValues = {
+    email: '',
+    password: '',
+}
 const Login = () => {
-    const [password, setPassword] = useState('')
-    const [email, setEmail] = useState('')
+    const [values, setValues] = useState(initialValues)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
 
     const { theme } = useContext(ThemeContext)
+
     // HANDLE CHANGE FUNCTION
     const handleChange = (e) => {
-        const { email, password, error } = e.target
+        const { name, value } = e.target
 
-        setPassword(password)
-        setEmail(email)
-        setError(error)
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        await registerUser('POST', 'api/user/login ', {
-            email: email,
-            password: password,
+        // SET STATE
+        setValues({
+            ...values,
+            [name]: value,
         })
     }
 
+    const { email, password } = values
+
+    // HANDLE SUBMIT FUNC
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        await postUser('POST', 'api/user/login ', {
+            email,
+            password,
+        })
+        setValues(initialValues)
+    }
+
     return (
-        <div className={theme ? 'bg-black' : 'bg-transparent'}>
+        <div className={theme ? 'bg-black text-white' : 'bg-transparent'}>
             <Navbar />
             <div className="flex flex-col min-h-screen justify-center items-center">
                 <div className="w-2/5">
@@ -42,7 +52,8 @@ const Login = () => {
                     <ReusableInput
                         type="email"
                         label={'Email'}
-                        value={email}
+                        name="email"
+                        value={values.email}
                         handleChange={handleChange}
                         error={error ? 'Email is required' : ''}
                         placeholder={'Enter Email'}
@@ -52,7 +63,8 @@ const Login = () => {
                     <ReusableInput
                         type="password"
                         label={'Password'}
-                        value={password}
+                        name="password"
+                        value={values.password}
                         handleChange={handleChange}
                         placeholder={'Enter Password'}
                         error={error ? 'Password is required' : ''}

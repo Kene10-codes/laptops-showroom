@@ -8,6 +8,10 @@ const userRegister = Joi.object({
     password: Joi.string().min(8).required(),
 })
 
+const userLogin = Joi.object({
+    email: Joi.string().min(5).max(255).email().required(),
+    password: Joi.string().min(8).required(),
+})
 const userResetEmail = Joi.object({
     email: Joi.string().min(5).max(255).email().required(),
 })
@@ -17,6 +21,7 @@ const validateNewPassword = Joi.object({
 })
 
 module.exports = {
+    userLogin,
     userRegister,
     userResetEmail,
     validateNewPassword,

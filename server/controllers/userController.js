@@ -4,6 +4,7 @@ const bcryptjs = require('bcryptjs')
 const { User } = require('../models/user')
 const { generateOTP } = require('../services/otp')
 const {
+    userLogin,
     userRegister,
     userResetEmail,
     validateNewPassword,
@@ -69,7 +70,7 @@ async function registerUser(req, res) {
             .status(201)
             .json({ message: 'User created successfully' })
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }
 
@@ -112,6 +113,30 @@ async function validateUserRegister(req, res) {
         )
         res.status(200).json({ message: 'User successfully verified' })
     } catch (e) {
+        // console.log(e)
+    }
+}
+
+async function authLogin(req, res) {
+    try {
+        const { error } = userLogin.validate(req.body)
+        if (error)
+            return res.status(400).json({ error: error.details[0].message })
+
+        // CHECK IF USER CREDENTIALS EXISTS
+        const user = await User.findOne({ email: req.body.email })
+        if (!user) return res.status(400).send('Invalid email or password')
+
+        // COMPARE USER PASSWORD
+        const isValid = bcryptjs.compare(req.body.password, user.password)
+        if (!isValid) return res.status(400).send('Password is incorrect')
+
+        const token = user.generateToken()
+
+        res.header('x-auth-token', token)
+            .status(200)
+            .json({ message: 'User successfully logged in' })
+    } catch (e) {
         console.log(e)
     }
 }
@@ -127,7 +152,7 @@ async function fetchUsers(req, res) {
 
         res.status(200).json({ message: users })
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }
 
@@ -158,7 +183,7 @@ async function deleteUser(req, res) {
 
         res.status(200).json({ message: 'User deleted successfully' })
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }
 
@@ -201,7 +226,7 @@ async function resetPassword(req, res) {
 
         res.status(200).json({ message: 'Password reset initated' })
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }
 
@@ -245,15 +270,16 @@ async function resetNewPassword(req, res) {
         )
         res.status(200).json({ message: 'Password reset was successful' })
     } catch (e) {
-        console.log(e)
+        // console.log(e)
     }
 }
 module.exports = {
+    authLogin,
     fetchUsers,
-    registerUser,
-    validateUserRegister,
     fetchUser,
     deleteUser,
+    registerUser,
     resetPassword,
     resetNewPassword,
+    validateUserRegister,
 }

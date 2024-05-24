@@ -8,6 +8,7 @@ const {
     deleteUser,
     resetPassword,
     resetNewPassword,
+    authLogin,
 } = require('../controllers/userController')
 const auth = require('../middlewares/jwt')
 
@@ -16,6 +17,7 @@ const router = express()
 
 router.get('/', fetchUsers)
 router.get('/:id', fetchUser)
+router.post('/login', authLogin)
 router.post('/register', registerUser)
 router.delete('/:id', auth, deleteUser)
 router.post('/reset-password', resetPassword)
@@ -39,5 +41,6 @@ router.get('/auth/logout', (req, res) => {
     req.logout()
     res.redirect('/')
 })
+
 // EXPORT ROUTER
 module.exports = router
